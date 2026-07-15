@@ -1,8 +1,34 @@
 import { useState } from 'react'
+// Old deep-path imports — changed/removed in newer majors (good DepRisk targets)
+import uniq from 'lodash/uniq'
+import capitalize from 'lodash/capitalize'
+import format from 'date-fns/format'
+import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
+import { z } from 'zod'
+import queryString from 'query-string'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+
+const demoItems = uniq(['vite', 'react', 'lodash', 'react', 'vite'])
+const title = capitalize('get started')
+const demoId = uuidv4()
+const demoDate = format(new Date(2020, 0, 15), 'yyyy-MM-dd')
+const UserSchema = z.object({
+  name: z.string(),
+  age: z.number().min(0),
+  email: z.string().email(),
+})
+const parsedUser = UserSchema.parse({
+  name: 'Renovate',
+  age: 1,
+  email: 'demo@example.com',
+})
+const axiosVersion = axios.VERSION || '0.21.x'
+const queryDemo = queryString.stringify({ pkg: 'deprisk-check', risk: 'high' })
+const parsedQuery = queryString.parse(queryDemo)
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,10 +42,37 @@ function App() {
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
         <div>
-          <h1>Get started</h1>
+          <h1>{title}</h1>
           <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+            Old import styles for{' '}
+            <a href="https://www.npmjs.com/package/deprisk-check" target="_blank" rel="noreferrer">
+              deprisk-check
+            </a>{' '}
+            testing
           </p>
+          <ul style={{ textAlign: 'left', listStyle: 'disc', paddingLeft: '1.25rem' }}>
+            <li>
+              <code>lodash/uniq</code> + <code>lodash/capitalize</code> @4.0.0 → {demoItems.join(' · ')}
+            </li>
+            <li>
+              <code>date-fns/format</code> @2.30.0 → {demoDate}
+            </li>
+            <li>
+              <code>{'{ v4 }'} from 'uuid'</code> @8.3.2 → {demoId}
+            </li>
+            <li>
+              <code>{'{ z }'} from 'zod'</code> @3.22.4 → {parsedUser.name} / {parsedUser.email}
+            </li>
+            <li>
+              <code>query-string</code> default import @6.14.1 → {parsedQuery.pkg}={parsedQuery.risk}
+            </li>
+            <li>
+              axios default import @{axiosVersion} (pinned 0.21.4)
+            </li>
+            <li>
+              chalk default import @4.1.2 → run <code>npm run demo:chalk</code>
+            </li>
+          </ul>
         </div>
         <button
           type="button"
