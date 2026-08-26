@@ -19,7 +19,7 @@
     "deprisk:all": "npm run deprisk:chalk && npm run deprisk:lodash && npm run deprisk:date-fns && npm run deprisk:uuid && npm run deprisk:zod && npm run deprisk:query-string && npm run deprisk:axios"
   },
   "dependencies": {
-    "axios": "0.21.4",
+    "axios": "1.20.0",
     "chalk": "4.1.2",
     "date-fns": "2.30.0",
     "lodash": "4.0.0",
